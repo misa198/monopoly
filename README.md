@@ -6,7 +6,7 @@ IT4062: Network Programming
 ## Usage
 
 ```bash
-$ git clone git@github.com:misa198/monopoly.git
+$ git clone --recursive git@github.com:misa198/monopoly.git
 ```
 
 ### Server
