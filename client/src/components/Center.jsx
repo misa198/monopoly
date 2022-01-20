@@ -1,14 +1,40 @@
-import { useSelector, useDispatch } from "react-redux";
+import WsContext from "../app/contexts/WsContext";
+import { useSelector } from "react-redux";
 import "./Center.scss";
-import { boardActions } from "../app/store/boardSlice";
+import { roleDice as rD } from "../utils/roleDice";
+import { useContext, useState, useMemo, useEffect } from "react";
 
 const Center = () => {
-  const dispatch = useDispatch();
   const log = useSelector((state) => state.board.log);
   const dices = useSelector((state) => state.board.dices);
+  const name = useSelector((state) => state.board.name);
+  const turn = useSelector((state) => state.board.turn);
+  const users = useSelector((state) => state.board.users);
+  const userOrder = useMemo(() => {
+    return users.findIndex((u) => u.name === name);
+  }, [name, users]);
+  const { sendMessage } = useContext(WsContext);
+  const [isDisabledRoleButton, setIsDisabledRoleButton] = useState(true);
+
+  useEffect(() => {
+    if (turn % 4 === userOrder) {
+      setIsDisabledRoleButton(false);
+    } else {
+      setIsDisabledRoleButton(true);
+    }
+  }, [turn]);
 
   const roleDice = () => {
-    dispatch(boardActions.roleDice());
+    const scores = rD();
+    sendMessage(
+      JSON.stringify({
+        type: "ROLE_DICE",
+        payload: {
+          scores,
+          name,
+        },
+      })
+    );
   };
 
   return (
@@ -19,7 +45,9 @@ const Center = () => {
             <img key={i} src={`/images/dice-${d}.png`} alt="dice" />
           ))}
         </div>
-        <button onClick={roleDice}>Role</button>
+        <button disabled={isDisabledRoleButton} onClick={roleDice}>
+          Role
+        </button>
       </div>
 
       <div className="log">

@@ -23,20 +23,21 @@ const EnterGame = () => {
         users.forEach((user) => {
           usedColors.push(user.color);
         });
+        let color;
         colors.forEach((c) => {
           if (!usedColors.includes(c)) {
-            sendMessage(
-              JSON.stringify({
-                type: "JOIN_GAME",
-                payload: {
-                  name,
-                  color: c,
-                },
-              })
-            );
-            return;
+            color = c;
           }
         });
+        sendMessage(
+          JSON.stringify({
+            type: "JOIN_GAME",
+            payload: {
+              name,
+              color,
+            },
+          })
+        );
         dispatch(boardActions.setName(name));
       } else {
         alert("Game đã đủ người");

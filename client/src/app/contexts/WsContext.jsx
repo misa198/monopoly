@@ -50,6 +50,7 @@ const WsProvider = ({ children }) => {
 
       if (data.type === "JOIN_GAME") {
         if (!users.find((u) => u.name === data.payload.name)) {
+          dispatch(boardActions.changePendingStatus());
           dispatch(
             boardActions.addUser({
               ...data.payload,
@@ -59,6 +60,15 @@ const WsProvider = ({ children }) => {
             })
           );
         }
+      }
+
+      if (data.type === "ROLE_DICE") {
+        const { name, scores } = data.payload;
+        dispatch(boardActions.nextTurn());
+        const newLog = `${name} đã tung được ${scores.join(", ")}`;
+        dispatch(boardActions.setDices(scores));
+        dispatch(boardActions.addLog(newLog));
+        dispatch(boardActions.updateUserPosition({ name, scores }));
       }
     }
   }, [lastMessage]);

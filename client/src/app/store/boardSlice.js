@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { positions } from "../../constants/items";
-import { roleDice } from "../../utils/roleDice";
 
 const boardSlice = createSlice({
   name: "board",
@@ -8,6 +7,7 @@ const boardSlice = createSlice({
     name: "",
     log: [],
     dices: [1, 2],
+    turn: 1,
     users: [],
   },
   reducers: {
@@ -20,10 +20,25 @@ const boardSlice = createSlice({
     addUser(state, action) {
       state.users.push(action.payload);
     },
-    roleDice(state) {
-      const score = roleDice();
-      state.log.push(`${state.name} roled dice: ${score[0]} and ${score[1]}`);
-      state.dices = score;
+    setDices(state, action) {
+      state.dices = action.payload;
+    },
+    updateUserPosition(state, action) {
+      const score = action.payload.scores[0] + action.payload.scores[1];
+      const currentUserIndex = state.users.findIndex(
+        (u) => u.name === action.payload.name
+      );
+      const currentPostionIndex = positions.findIndex(
+        (p) => p === state.users[currentUserIndex].position
+      );
+      const newPositionIndex = (currentPostionIndex + score) % positions.length;
+      state.users[currentUserIndex].position = positions[newPositionIndex];
+    },
+    addLog(state, action) {
+      state.log.push(action.payload);
+    },
+    nextTurn(state) {
+      state.turn += 1;
     },
   },
 });
