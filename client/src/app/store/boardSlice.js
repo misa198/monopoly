@@ -5,29 +5,21 @@ import { roleDice } from "../../utils/roleDice";
 const boardSlice = createSlice({
   name: "board",
   initialState: {
-    name: "A",
+    name: "",
     log: [],
     dices: [1, 2],
-    users: [
-      {
-        name: "A",
-        color: "red",
-        position: positions[0],
-        money: 2000,
-        assets: [
-          {
-            locale: 0,
-            level: 0,
-          },
-          {
-            locale: 1,
-            level: 2,
-          },
-        ],
-      },
-    ],
+    users: [],
   },
   reducers: {
+    setName(state, action) {
+      state.name = action.payload;
+    },
+    setUser(state, action) {
+      state.users = action.payload;
+    },
+    addUser(state, action) {
+      state.users.push(action.payload);
+    },
     roleDice(state) {
       const score = roleDice();
       state.log.push(`${state.name} roled dice: ${score[0]} and ${score[1]}`);

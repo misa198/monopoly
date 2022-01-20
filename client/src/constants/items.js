@@ -1,3 +1,5 @@
+export const colors = ["green", "red", "blue", "pink"];
+
 export const positions = [
   30, 24, 18, 12, 6, 0, 1, 2, 3, 4, 5, 11, 17, 23, 29, 35, 34, 33, 32, 31,
 ];
