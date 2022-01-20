@@ -9,7 +9,7 @@ const Board = () => {
       <Center />
       {[...Array(36).keys()].map((i) => (
         <div key={i} className="land">
-          {items[i] && <Item item={items[i]} />}
+          {items[i] && <Item item={items[i]} position={i} />}
         </div>
       ))}
     </div>
