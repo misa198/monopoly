@@ -1,0 +1,53 @@
+.item {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  &__name {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30px;
+    font-weight: bold;
+  }
+
+  &__price {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    font-weight: bold;
+  }
+
+  &__color {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30px;
+    background-color: red;
+    border-top: 1px solid black;
+  }
+
+  &__users {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 30px;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 32px;
+  }
+
+  &__user {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: red;
+    border: 2px solid #fff;
+  }
+}
