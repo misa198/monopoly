@@ -50,7 +50,6 @@ const WsProvider = ({ children }) => {
 
       if (data.type === "JOIN_GAME") {
         if (!users.find((u) => u.name === data.payload.name)) {
-          dispatch(boardActions.changePendingStatus());
           dispatch(
             boardActions.addUser({
               ...data.payload,
