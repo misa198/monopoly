@@ -7,7 +7,7 @@ import { positions } from "../../constants/items";
 const WsContext = createContext("ws");
 
 const WsProvider = ({ children }) => {
-  const socketUrl = "ws://localhost:8080";
+  const socketUrl = "ws://monopoly-sata.herokuapp.com";
   const socket = useWebSocket(socketUrl);
   const dispatch = useDispatch();
   const { sendMessage, lastMessage, readyState } = socket;
