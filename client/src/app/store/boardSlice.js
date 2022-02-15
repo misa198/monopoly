@@ -1,5 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { positions, items } from '../../constants/items';
+import { createSlice } from "@reduxjs/toolkit";
+import { positions, items } from "../../constants/items";
 
 const assets = Object.fromEntries(
   positions.map((pos, index) => {
@@ -10,14 +10,15 @@ const assets = Object.fromEntries(
         level: 0,
       },
     ];
-  }),
+  })
 );
 console.log(assets);
 
 const boardSlice = createSlice({
-  name: 'board',
+  name: "board",
+  lose: false,
   initialState: {
-    name: '',
+    name: "",
     log: [],
     dices: [1, 2],
     turn: 1,
@@ -41,10 +42,10 @@ const boardSlice = createSlice({
     updateUserPosition(state, action) {
       const score = action.payload.scores[0] + action.payload.scores[1];
       const currentUserIndex = state.users.findIndex(
-        (u) => u.name === action.payload.name,
+        (u) => u.name === action.payload.name
       );
       const currentPostionIndex = positions.findIndex(
-        (p) => p === state.users[currentUserIndex].position,
+        (p) => p === state.users[currentUserIndex].position
       );
       const newPositionIndex = (currentPostionIndex + score) % positions.length;
       state.users[currentUserIndex].position = positions[newPositionIndex];
@@ -82,6 +83,9 @@ const boardSlice = createSlice({
       state.users[index].money -= items[locale].prices[level] * 0.6;
       // Bonus
       state.users[ownerIndex].money += items[locale].prices[level] * 0.6;
+    },
+    setLose(state) {
+      state.lose = true;
     },
   },
 });

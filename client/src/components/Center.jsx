@@ -13,6 +13,7 @@ const Center = () => {
   const users = useSelector((state) => state.board.users);
   const tradeTurn = useSelector((state) => state.board.tradeTurn);
   const assets = useSelector((state) => state.board.assets);
+  const lose = useSelector((state) => state.board.lose);
   const userOrder = useMemo(() => {
     return users.findIndex((u) => u.name === name);
   }, [name, users]);
@@ -24,6 +25,13 @@ const Center = () => {
   useEffect(() => {
     if (turn % 4 === userOrder) {
       setIsDisabledRoleButton(false);
+      if (lose) {
+        sendMessage(
+          JSON.stringify({
+            type: "SKIP_TURN",
+          })
+        );
+      }
     } else {
       setIsDisabledRoleButton(true);
     }

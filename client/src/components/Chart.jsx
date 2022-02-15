@@ -1,10 +1,12 @@
 import "./Chart.scss";
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { boardActions } from "../app/store/boardSlice";
 
 const Chart = () => {
   const users = useSelector((state) => state.board.users);
   const name = useSelector((state) => state.board.name);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     let bankrupt = 0;
@@ -20,6 +22,7 @@ const Chart = () => {
       if (lose && !alerted) {
         alert("Bạn thua");
         alerted = true;
+        dispatch(boardActions.setLose());
       }
     });
     if (bankrupt === 3) {
