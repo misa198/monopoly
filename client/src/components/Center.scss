@@ -34,18 +34,24 @@
     }
   }
 
-  .log {
-    width: 500px;
-    height: 300px;
-    border-radius: 8px;
-    border: 1px solid #000;
-    margin: 0 auto;
-    margin-top: 8px;
-    padding: 10px 14px;
-    overflow-y: scroll;
+  .center-content {
+    display: flex;
+    padding: 10px;
 
-    &__line {
-      line-height: 24px;
+    .log {
+      width: 50%;
+      height: 300px;
+      border-radius: 8px;
+      border: 1px solid #000;
+      margin: 0 auto;
+      margin-top: 8px;
+      padding: 10px 14px;
+      margin-right: 5px;
+      overflow-y: scroll;
+
+      &__line {
+        line-height: 24px;
+      }
     }
   }
 }

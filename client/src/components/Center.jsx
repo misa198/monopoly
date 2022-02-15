@@ -1,8 +1,9 @@
-import WsContext from '../app/contexts/WsContext';
-import { useSelector } from 'react-redux';
-import './Center.scss';
-import { roleDice as rD } from '../utils/roleDice';
-import { useContext, useState, useMemo, useEffect } from 'react';
+import WsContext from "../app/contexts/WsContext";
+import { useSelector } from "react-redux";
+import "./Center.scss";
+import { roleDice as rD } from "../utils/roleDice";
+import { useContext, useState, useMemo, useEffect } from "react";
+import Chart from "./Chart";
 
 const Center = () => {
   const log = useSelector((state) => state.board.log);
@@ -34,29 +35,29 @@ const Center = () => {
       });
       let locale = users[index].position;
       if (!assets[locale].name) {
-        const tradeStatus = window.confirm('Bạn có muốn mua k?');
+        const tradeStatus = window.confirm("Bạn có muốn mua k?");
         if (tradeStatus) {
           sendMessage(
             JSON.stringify({
-              type: 'ADD_ASSET',
+              type: "ADD_ASSET",
               payload: {
                 name,
                 index,
                 locale,
               },
-            }),
+            })
           );
         }
       } else {
-        alert('Bạn bị trừ tiền!');
+        alert("Bạn bị trừ tiền!");
         sendMessage(
           JSON.stringify({
-            type: 'FINE',
+            type: "FINE",
             payload: {
               index,
               locale,
             },
-          }),
+          })
         );
       }
     }
@@ -66,13 +67,13 @@ const Center = () => {
     const scores = rD();
     sendMessage(
       JSON.stringify({
-        type: 'ROLE_DICE',
+        type: "ROLE_DICE",
         payload: {
           scores,
           name,
           tradeTurn: userOrder,
         },
-      }),
+      })
     );
   };
 
@@ -91,12 +92,15 @@ const Center = () => {
         </button>
       </div>
 
-      <div className="log">
-        {log.map((l, i) => (
-          <div className="log__line" key={i}>
-            {l}
-          </div>
-        ))}
+      <div className="center-content">
+        <div className="log">
+          {log.map((l, i) => (
+            <div className="log__line" key={i}>
+              {l}
+            </div>
+          ))}
+        </div>
+        <Chart />
       </div>
     </div>
   );
