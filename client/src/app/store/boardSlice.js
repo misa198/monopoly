@@ -1,14 +1,29 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { positions } from "../../constants/items";
+import { createSlice } from '@reduxjs/toolkit';
+import { positions, items } from '../../constants/items';
+
+const assets = Object.fromEntries(
+  positions.map((pos, index) => {
+    return [
+      pos,
+      {
+        name: undefined,
+        level: 0,
+      },
+    ];
+  }),
+);
+console.log(assets);
 
 const boardSlice = createSlice({
-  name: "board",
+  name: 'board',
   initialState: {
-    name: "",
+    name: '',
     log: [],
     dices: [1, 2],
     turn: 1,
     users: [],
+    tradeTurn: 0,
+    assets,
   },
   reducers: {
     setName(state, action) {
@@ -26,10 +41,10 @@ const boardSlice = createSlice({
     updateUserPosition(state, action) {
       const score = action.payload.scores[0] + action.payload.scores[1];
       const currentUserIndex = state.users.findIndex(
-        (u) => u.name === action.payload.name
+        (u) => u.name === action.payload.name,
       );
       const currentPostionIndex = positions.findIndex(
-        (p) => p === state.users[currentUserIndex].position
+        (p) => p === state.users[currentUserIndex].position,
       );
       const newPositionIndex = (currentPostionIndex + score) % positions.length;
       state.users[currentUserIndex].position = positions[newPositionIndex];
@@ -39,6 +54,34 @@ const boardSlice = createSlice({
     },
     nextTurn(state) {
       state.turn += 1;
+    },
+    setTradeTurn(state, action) {
+      state.tradeTurn = action.payload.tradeTurn;
+    },
+    addAsset(state, action) {
+      let level = 0;
+      const { index, locale, name } = action.payload;
+      // Add asset
+      state.users[index].assets.push({
+        locale,
+        level,
+      });
+      state.assets[locale].name = name;
+      // Money calculate
+      state.users[index].money -= items[locale].prices[level];
+    },
+    fine(state, action) {
+      const { index, locale } = action.payload;
+      let level = 0;
+      let ownerIndex = 0;
+      let ownerName = state.assets[locale].name;
+      state.users.forEach((u, i) => {
+        if (u.name === ownerName) ownerIndex = i;
+      });
+      // Fine
+      state.users[index].money -= items[locale].prices[level] * 0.6;
+      // Bonus
+      state.users[ownerIndex].money += items[locale].prices[level] * 0.6;
     },
   },
 });

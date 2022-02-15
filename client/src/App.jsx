@@ -1,16 +1,17 @@
-import { useSelector } from "react-redux";
-import Board from "./components/Board";
-import EnterGame from "./components/EnterGame";
+import { useSelector } from 'react-redux';
+import Board from './components/Board';
+import EnterGame from './components/EnterGame';
 
 const App = () => {
   const name = useSelector((state) => state.board.name);
   const users = useSelector((state) => state.board.users);
+  const dices = useSelector((state) => state.board.dices);
 
   return name ? (
     users.length === 4 ? (
-      <Board />
+      <Board dices={dices} />
     ) : (
-      "Chưa đủ người"
+      'Chưa đủ người'
     )
   ) : (
     <EnterGame />
