@@ -54,7 +54,7 @@ const WsProvider = ({ children }) => {
             boardActions.addUser({
               ...data.payload,
               position: positions[0],
-              money: 2000,
+              money: 100,
               assets: [],
             }),
           );

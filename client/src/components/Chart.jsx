@@ -1,8 +1,35 @@
 import "./Chart.scss";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
 const Chart = () => {
   const users = useSelector((state) => state.board.users);
+  const name = useSelector((state) => state.board.name);
+
+  useEffect(() => {
+    let bankrupt = 0;
+    let lose = false;
+    let alerted = false;
+    users.forEach((user) => {
+      if (user.money <= 0) {
+        bankrupt++;
+      }
+      if (user.money <= 0 && user.name === name) {
+        lose = true;
+      }
+      if (lose && !alerted) {
+        alert("Bạn thua");
+        alerted = true;
+      }
+    });
+    if (bankrupt === 3) {
+      if (lose) {
+        alert("Trò chơi kết thúc");
+      } else {
+        alert("Bạn thắng");
+      }
+    }
+  }, [users]);
 
   return (
     <div className="chart">
