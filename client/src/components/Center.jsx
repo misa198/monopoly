@@ -42,31 +42,53 @@ const Center = () => {
         if (u.name === name) index = i;
       });
       let locale = users[index].position;
-      if (!assets[locale].name) {
-        const tradeStatus = window.confirm('Bạn có muốn mua không?');
-        if (tradeStatus) {
-          sendMessage(
-            JSON.stringify({
-              type: 'ADD_ASSET',
-              payload: {
-                name,
-                index,
-                locale,
-              },
-            }),
-          );
+      if (locale !== 30) {
+        if (!assets[locale].name) {
+          const tradeStatus = window.confirm('Bạn có muốn mua không?');
+          if (tradeStatus) {
+            sendMessage(
+              JSON.stringify({
+                type: 'ADD_ASSET',
+                payload: {
+                  name,
+                  index,
+                  locale,
+                },
+              }),
+            );
+          }
+        } else {
+          if (assets[locale].name === name) {
+            if (assets[locale].level < 2) {
+              const upgradeStatus = window.confirm(
+                'Bạn có muốn nâng cấp nhà không?',
+              );
+              if (upgradeStatus) {
+                sendMessage(
+                  JSON.stringify({
+                    type: 'UPGRADE_ASSET',
+                    payload: {
+                      index,
+                      locale,
+                    },
+                  }),
+                );
+              }
+            }
+          } else {
+            alert('Bạn bị trừ tiền!');
+            sendMessage(
+              JSON.stringify({
+                type: 'FINE',
+                payload: {
+                  index,
+                  locale,
+                  level: assets[locale].level,
+                },
+              }),
+            );
+          }
         }
-      } else {
-        alert('Bạn bị trừ tiền!');
-        sendMessage(
-          JSON.stringify({
-            type: 'FINE',
-            payload: {
-              index,
-              locale,
-            },
-          }),
-        );
       }
     }
   }, [turn]);

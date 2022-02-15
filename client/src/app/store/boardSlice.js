@@ -77,8 +77,7 @@ const boardSlice = createSlice({
       }
     },
     fine(state, action) {
-      const { index, locale } = action.payload;
-      let level = 0;
+      const { index, locale, level } = action.payload;
       let ownerIndex = 0;
       let ownerName = state.assets[locale].name;
       state.users.forEach((u, i) => {
@@ -91,6 +90,22 @@ const boardSlice = createSlice({
     },
     setLose(state) {
       state.lose = true;
+    },
+    upgradeAsset(state, action) {
+      const { index, locale } = action.payload;
+      let assetIndex = 0;
+      state.users[index].assets.forEach((a, i) => {
+        if (a.locale === locale) assetIndex = i;
+      });
+      let beforeLevel = state.users[index].assets[assetIndex].level;
+      let afterLevelPrice = items[locale].prices[beforeLevel + 1];
+      if (state.users[index].money < afterLevelPrice)
+        alert('Bạn không đủ tiền nâng cấp!');
+      else {
+        state.users[index].assets[assetIndex].level++;
+        state.users[index].money -= afterLevelPrice;
+        state.assets[locale].level++;
+      }
     },
   },
 });
