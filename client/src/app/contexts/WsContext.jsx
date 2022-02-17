@@ -54,7 +54,7 @@ const WsProvider = ({ children }) => {
             boardActions.addUser({
               ...data.payload,
               position: positions[0],
-              money: 500,
+              money: 300,
               assets: [],
             }),
           );
@@ -86,8 +86,15 @@ const WsProvider = ({ children }) => {
       }
 
       if (data.type === 'UPGRADE_ASSET') {
-        const { index, locale } = data.payload;
-        dispatch(boardActions.upgradeAsset({ index, locale }));
+        const { index, locale, assetIndex, afterLevelPrice } = data.payload;
+        dispatch(
+          boardActions.upgradeAsset({
+            index,
+            locale,
+            assetIndex,
+            afterLevelPrice,
+          }),
+        );
       }
     }
   }, [lastMessage]);

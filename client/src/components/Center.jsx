@@ -4,6 +4,7 @@ import './Center.scss';
 import { roleDice as rD } from '../utils/roleDice';
 import { useContext, useState, useMemo, useEffect } from 'react';
 import Chart from './Chart';
+import { items } from '../constants/items';
 
 const Center = () => {
   const log = useSelector((state) => state.board.log);
@@ -44,18 +45,22 @@ const Center = () => {
       let locale = users[index].position;
       if (locale !== 30) {
         if (!assets[locale].name) {
-          const tradeStatus = window.confirm('Bạn có muốn mua không?');
+          const tradeStatus = window.confirm('Bạn có muốn mua nhà không?');
           if (tradeStatus) {
-            sendMessage(
-              JSON.stringify({
-                type: 'ADD_ASSET',
-                payload: {
-                  name,
-                  index,
-                  locale,
-                },
-              }),
-            );
+            if (users[index].money <= items[locale].prices[0])
+              alert('Bạn không đủ tiền mua!');
+            else {
+              sendMessage(
+                JSON.stringify({
+                  type: 'ADD_ASSET',
+                  payload: {
+                    name,
+                    index,
+                    locale,
+                  },
+                }),
+              );
+            }
           }
         } else {
           if (assets[locale].name === name) {
@@ -64,15 +69,27 @@ const Center = () => {
                 'Bạn có muốn nâng cấp nhà không?',
               );
               if (upgradeStatus) {
-                sendMessage(
-                  JSON.stringify({
-                    type: 'UPGRADE_ASSET',
-                    payload: {
-                      index,
-                      locale,
-                    },
-                  }),
-                );
+                let assetIndex = 0;
+                users[index].assets.forEach((a, i) => {
+                  if (a.locale === locale) assetIndex = i;
+                });
+                let beforeLevel = users[index].assets[assetIndex].level;
+                let afterLevelPrice = items[locale].prices[beforeLevel + 1];
+                if (users[index].money < afterLevelPrice)
+                  alert('Bạn không đủ tiền nâng cấp!');
+                else {
+                  sendMessage(
+                    JSON.stringify({
+                      type: 'UPGRADE_ASSET',
+                      payload: {
+                        index,
+                        locale,
+                        assetIndex,
+                        afterLevelPrice,
+                      },
+                    }),
+                  );
+                }
               }
             }
           } else {

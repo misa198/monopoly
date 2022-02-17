@@ -62,19 +62,14 @@ const boardSlice = createSlice({
     addAsset(state, action) {
       let level = 0;
       const { index, locale, name } = action.payload;
-      // Check enough money
-      if (state.users[index].money < items[locale].prices[level])
-        alert('Bạn không đủ tiền mua!');
-      else {
-        // Add asset
-        state.users[index].assets.push({
-          locale,
-          level,
-        });
-        state.assets[locale].name = name;
-        // Money calculate
-        state.users[index].money -= items[locale].prices[level];
-      }
+      // Add asset
+      state.users[index].assets.push({
+        locale,
+        level,
+      });
+      state.assets[locale].name = name;
+      // Money calculate
+      state.users[index].money -= items[locale].prices[level];
     },
     fine(state, action) {
       const { index, locale, level } = action.payload;
@@ -92,20 +87,10 @@ const boardSlice = createSlice({
       state.lose = true;
     },
     upgradeAsset(state, action) {
-      const { index, locale } = action.payload;
-      let assetIndex = 0;
-      state.users[index].assets.forEach((a, i) => {
-        if (a.locale === locale) assetIndex = i;
-      });
-      let beforeLevel = state.users[index].assets[assetIndex].level;
-      let afterLevelPrice = items[locale].prices[beforeLevel + 1];
-      if (state.users[index].money < afterLevelPrice)
-        alert('Bạn không đủ tiền nâng cấp!');
-      else {
-        state.users[index].assets[assetIndex].level++;
-        state.users[index].money -= afterLevelPrice;
-        state.assets[locale].level++;
-      }
+      const { index, locale, assetIndex, afterLevelPrice } = action.payload;
+      state.users[index].assets[assetIndex].level++;
+      state.users[index].money -= afterLevelPrice;
+      state.assets[locale].level++;
     },
   },
 });
